@@ -5,15 +5,17 @@ openerp-sane is a collection of small utilities, making OpenERP development seem
 warfare with blood and guts everywhere, and more like Python.
 
 For now, there's just one utility: the ``@oemeth`` method decorator which straightens out our we
-manage the famous ``ids`` argument in our model methods. Example::
+manage the famous ``ids`` argument in our model methods. Example:
 
-    :::python
+.. code-block:: python
+
     def myaction(self, cr, uid, ids, context=None): pass
 
 Normally, ``ids`` is supposed to be a list of ``int``, but *sometimes*, just, **sometimes**, we get
-a naked ``int``, then our method crashes. We have to add code like::
+a naked ``int``, then our method crashes. We have to add code like:
 
-    :::python
+.. code-block:: python
+
     if isinstance(ids, (int, long)):
         ids = [ids]
 
@@ -27,9 +29,10 @@ Usage
 -----
 
 ``@oemeth`` is a method decorator that takes 2 (optional, default to ``False``) arguments:
-``single`` and ``browse``. By default, it simply makes sure that ``ids`` is a list::
+``single`` and ``browse``. By default, it simply makes sure that ``ids`` is a list:
 
-    :::python
+.. code-block:: python
+
     from openerp_sane import oemeth
 
     # [...]
@@ -38,18 +41,20 @@ Usage
     def myaction(self, cr, uid, ids, context=None):
         # Write code that assumes ids is a list
 
-With ``single`` to ``True``, we enforce a single ``int`` id::
+With ``single`` to ``True``, we enforce a single ``int`` id:
 
-    :::python
+.. code-block:: python
+
     @oemeth(single=True)
     def myaction(self, cr, uid, objid, context=None):
         # objid is an ``int``.
         # WARNING: Use this only when you're sure that you'll only ever have single arguments.
         # If the input is a list with a len() != 1, an exception is raised.
 
-With ``browse`` to ``True``, we wrap our id(s) in a ``self.browse()`` call::
+With ``browse`` to ``True``, we wrap our id(s) in a ``self.browse()`` call:
 
-    :::python
+.. code-block:: python
+
     @oemeth(browse=True)
     def myaction(self, cr, uid, objs, context=None):
         # objs is a list of browse records
@@ -61,9 +66,10 @@ You can't wait to start using it in your modules, right? openerp-sane can be ins
 
     $ pip install openerp-sane
 
-When you use it in a module, you can document its dependency to it in your ``__openerp__.py``::
+When you use it in a module, you can document its dependency to it in your ``__openerp__.py``:
 
-    :::python
+.. code-block:: python
+
     {
         # [...]
         'external_dependencies': {
