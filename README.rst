@@ -77,3 +77,11 @@ When you use it in a module, you can document its dependency to it in your ``__o
         },
         # [...]
     }
+
+Bits of wisdom
+--------------
+
+Don't use ``single`` (which requires to always have exactly one id all the time) on ``on_change``
+methods. Sure, most of the time you get a single id, but if your call is made on a record that
+isn't committed yet, you will get zero ids, which will raise an exception. In the future, maybe the
+``single`` mode will support zero ids situations.
