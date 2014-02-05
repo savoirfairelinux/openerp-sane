@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "openerp-sane",
-    version = "0.2",
+    version = "0.2.1",
     url = "https://github.com/savoirfairelinux/openerp-sane",
     py_modules = ['openerp_sane'],
     author="Savoir-faire Linux",

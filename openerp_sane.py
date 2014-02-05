@@ -64,7 +64,7 @@ def s2d(str_date):
     """
     try:
         return datetime.datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
-    except ValueError:
+    except (ValueError, TypeError):
         return False
 
 def d2s(date):
