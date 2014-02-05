@@ -19,6 +19,8 @@
 ##############################################################################
 
 from functools import wraps
+import datetime
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 def get_browse_records(self, cr, uid, ids, *args, **kwargs):
     # We could try, when context isn't in kwargs, to try for the last argument in args, but
@@ -54,3 +56,23 @@ def oemeth(single=False, browse=False):
     if callable(single): # naked @oemeth. single is in fact a func to wrap
         return decorator_multi(single)
     return decorator_single if single else decorator_multi
+
+def s2d(str_date):
+    """Converts a value from ``fields.date()`` (a string) into a proper ``datetime.date``.
+
+    Returns ``False`` if not a valid date (it was probably a ``False`` value).
+    """
+    try:
+        return datetime.datetime.strptime(str_date, DEFAULT_SERVER_DATE_FORMAT).date()
+    except ValueError:
+        return False
+
+def d2s(date):
+    """Converts a ``datetime.date`` into a value that can be written in a ``fields.date()``.
+
+    If ``date`` is not a date, returns ``False``, which will be interpreted by OE as a null value.
+    """
+    try:
+        return date.strftime(DEFAULT_SERVER_DATE_FORMAT)
+    except AttributeError:
+        return False

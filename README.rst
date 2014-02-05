@@ -4,8 +4,9 @@ openerp-sane: Bring sanity back, one step at a time
 openerp-sane is a collection of small utilities, making OpenERP development seem less like ancient
 warfare with blood and guts everywhere, and more like Python.
 
-For now, there's just one utility: the ``@oemeth`` method decorator which straightens out our we
-manage the famous ``ids`` argument in our model methods. Example:
+For now, there's two utilities: ``@oemeth`` and ``s2d/d2s`` (date conversion). The ``@oemeth``
+method decorator which straightens out our we manage the famous ``ids`` argument in our model
+methods. Example:
 
 .. code-block:: python
 
@@ -25,8 +26,27 @@ going to handle one id at a time. I can do ``ids[0]`` easily enough, but if I re
 on the safe side, I'll make sure that ``ids`` is a list first. Aren't you tired of that ridiculous
 dance? Well, that's why we have ``@oemeth``
 
-Usage
------
+Install
+-------
+
+You can't wait to start using it in your modules, right? openerp-sane can be installed from PyPI::
+
+    $ pip install openerp-sane
+
+When you use it in a module, you can document its dependency to it in your ``__openerp__.py``:
+
+.. code-block:: python
+
+    {
+        # [...]
+        'external_dependencies': {
+            'python': ['openerp_sane'],
+        },
+        # [...]
+    }
+
+@oemeth
+-------
 
 ``@oemeth`` is a method decorator that takes 2 (optional, default to ``False``) arguments:
 ``single`` and ``browse``. By default, it simply makes sure that ``ids`` is a list:
@@ -59,24 +79,20 @@ With ``browse`` to ``True``, we wrap our id(s) in a ``self.browse()`` call:
     def myaction(self, cr, uid, objs, context=None):
         # objs is a list of browse records
 
-Install
+s2d/d2s
 -------
 
-You can't wait to start using it in your modules, right? openerp-sane can be installed from PyPI::
+``s2d()`` and ``d2s()`` (meaning "string-to-date" and "date-to-string") are there to alleviate the
+horrible problem we face when we actually have to process and compare dates. Without these helpers,
+we have to manually convert those with the right date format, which can get heavy quick.
 
-    $ pip install openerp-sane
+``s2d(string_date)`` takes the string value from a date field and returns a ``datetime.date``. If
+it can't parse it, it returns ``False``.
 
-When you use it in a module, you can document its dependency to it in your ``__openerp__.py``:
+``d2s(date)`` takes a ``datetime.date`` and returns a string which can be written to a date field.
+If ``date`` isn't a date, we return ``False`` (which can also be written to a date field).
 
-.. code-block:: python
-
-    {
-        # [...]
-        'external_dependencies': {
-            'python': ['openerp_sane'],
-        },
-        # [...]
-    }
+In both those functions, we use OE's ``DEFAULT_SERVER_DATE_FORMAT`` constant.
 
 Bits of wisdom
 --------------
